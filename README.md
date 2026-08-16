@@ -19,13 +19,27 @@
 
 ## 安装
 
-### 从 GitHub 安装
+### 从 GitHub 安装（推荐 HTTPS，无需 SSH key）
 
 ```bash
-dsh plugin --profile web add github:Sanchaji/dsh-yi
+dsh plugin --profile web add https://github.com/Sanchaji/dsh-yi.git
 ```
 
+也可以使用 `git+https` 形式：
+
+```bash
+dsh plugin --profile web add git+https://github.com/Sanchaji/dsh-yi.git
+```
+
+> 注意：`github:Sanchaji/dsh-yi` 这种简写会走 SSH，需要本机配置 GitHub SSH key；没有 SSH key 时请用上面的 HTTPS 地址。
+>
 > 仓库里已经包含构建好的 `lib/`，所以 git 安装后可以直接使用，不需要本地再跑构建。
+
+### 从 GitHub Release tgz 安装
+
+```bash
+dsh plugin --profile web add https://github.com/Sanchaji/dsh-yi/releases/download/v0.1.0/dsh-yi-0.1.0.tgz
+```
 
 ### 从本地目录安装
 

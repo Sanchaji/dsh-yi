@@ -18,10 +18,24 @@ An I Ching fortune-telling plugin for [DeepSeek Harness](https://github.com/deep
 
 ## Install
 
-From GitHub:
+From GitHub (HTTPS recommended, no SSH key required):
 
 ```bash
-dsh plugin --profile web add github:Sanchaji/dsh-yi
+dsh plugin --profile web add https://github.com/Sanchaji/dsh-yi.git
+```
+
+Or with `git+https`:
+
+```bash
+dsh plugin --profile web add git+https://github.com/Sanchaji/dsh-yi.git
+```
+
+> Note: the shorthand `github:Sanchaji/dsh-yi` uses SSH and requires an SSH key on the machine. Use the HTTPS URL above if you do not have one.
+
+From GitHub Release tarball:
+
+```bash
+dsh plugin --profile web add https://github.com/Sanchaji/dsh-yi/releases/download/v0.1.0/dsh-yi-0.1.0.tgz
 ```
 
 From a local directory:
