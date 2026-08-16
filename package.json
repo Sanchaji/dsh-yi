@@ -2,6 +2,14 @@
   "name": "dsh-yi",
   "version": "0.0.1",
   "description": "I Ching fortune-telling plugin with a ☯ UI entry",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sanchaji/dsh-yi.git"
+  },
+  "homepage": "https://github.com/Sanchaji/dsh-yi",
+  "bugs": {
+    "url": "https://github.com/Sanchaji/dsh-yi/issues"
+  },
   "private": false,
   "publishConfig": {
     "access": "public"

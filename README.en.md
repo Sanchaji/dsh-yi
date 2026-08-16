@@ -21,7 +21,7 @@ An I Ching fortune-telling plugin for [DeepSeek Harness](https://github.com/deep
 From GitHub:
 
 ```bash
-dsh plugin --profile web add github:<your-github-username>/dsh-yi
+dsh plugin --profile web add github:Sanchaji/dsh-yi
 ```
 
 From a local directory:
