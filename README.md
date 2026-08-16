@@ -62,7 +62,7 @@ dsh plugin --profile web add dsh-yi
 
 ```yaml
 - id: dsh-yi
-  name: '@dsh-external/dsh-yi'
+  name: 'dsh-yi'
   config:
     maxTokens: 2000
     temperature: 0.8

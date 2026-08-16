@@ -1,5 +1,5 @@
 {
-  "name": "@dsh-external/dsh-yi",
+  "name": "dsh-yi",
   "version": "0.0.1",
   "description": "I Ching fortune-telling plugin with a ☯ UI entry",
   "private": false,

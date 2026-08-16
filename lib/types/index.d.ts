@@ -1,5 +1,5 @@
 /**
- * @dsh-external/dsh-yi — Host half.
+ * dsh-yi — Host half.
  * Registers a `/divinate` command that performs I Ching coin casting and asks
  * the session's currently connected LLM to interpret the result.
  */
@@ -11,7 +11,7 @@ type AppContext = Context & {
     commands: CommandRuntime;
     llm: LlmService;
 };
-export declare const name = "@dsh-external/dsh-yi";
+export declare const name = "dsh-yi";
 export declare const inject: string[];
 export interface Config {
     /** Optional explicit provider override; must be paired with `model`. */

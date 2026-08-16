@@ -1,5 +1,5 @@
 /**
- * @dsh-external/dsh-yi — Client half.
+ * dsh-yi — Client half.
  * Registers a ☯ button in the session header action row and opens the
  * divination modal. Host communication goes through the existing
  * `remote.commands.execute` channel, so no custom Remote service is needed.
