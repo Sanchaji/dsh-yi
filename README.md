@@ -33,7 +33,7 @@ dsh plugin --profile web add github:<你的 GitHub 用户名>/dsh-yi
 dsh plugin --profile web add ./dsh-yi
 ```
 
-### 从 npm 安装（如果已发布）
+### 从 npm 安装
 
 ```bash
 dsh plugin --profile web add dsh-yi
