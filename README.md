@@ -22,7 +22,7 @@
 ### 从 GitHub 安装
 
 ```bash
-dsh plugin --profile web add github:<你的 GitHub 用户名>/dsh-yi
+dsh plugin --profile web add github:Sanchaji/dsh-yi
 ```
 
 > 仓库里已经包含构建好的 `lib/`，所以 git 安装后可以直接使用，不需要本地再跑构建。
