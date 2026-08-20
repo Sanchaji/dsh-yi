@@ -34,6 +34,7 @@ export function apply(ctx: ClientContext): void {
           const execution = await ctx.remote.commands.execute(
             sessionId,
             `/divinate ${JSON.stringify({ ...request, language: ctx.locale.getLocale().active })}`,
+            [],
           )
           if (!execution.ok) {
             throw new Error(execution.error.message)
