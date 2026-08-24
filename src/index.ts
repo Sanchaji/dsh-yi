@@ -3,8 +3,8 @@
  * Registers a `/divinate` command that performs I Ching coin casting and asks
  * the session's currently connected LLM to interpret the result.
  */
-import type { Context } from 'cordis'
-import z from 'schemastery'
+import type { Context } from '@deepseek-ai/cordis'
+import z from '@deepseek-ai/schemastery'
 import type LlmService from '@deepseek-ai/dsh-llm'
 import type { FinishReason } from '@deepseek-ai/dsh-llm'
 import { BlockAssembler, createUserMessage, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
