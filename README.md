@@ -99,10 +99,9 @@ dsh plugin --profile web add dsh-yi
 
 ```bash
 DSH_CHECKOUT=/path/to/deepseek-harness bash scripts/build.sh
-npm run build:client
 ```
 
-构建产物会输出到 `lib/`。
+构建产物会输出到 `lib/`。构建包含两步：先用 checkout 的 tsc 编译 src/，再用 checkout 的 tsdown 把 host 端打包成自包含的单文件 `lib/index.js`（运行时不需要任何 node_modules 依赖，schemastery 与 dsh-llm 的辅助代码已内联），client 端沿用原有的 Web ModuleLoader 包装。
 
 ## 项目结构
 

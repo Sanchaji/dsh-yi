@@ -5,4 +5,4 @@ export type DivinationButtonProps = PropsRuntime<'conversation.session.header.ac
  * The ☯ header action. Renders a small button and, when clicked, a modal that
  * guides the user through topic/method selection and shows the LLM reading.
  */
-export declare function DivinationButton({ runDivination }: DivinationButtonProps): any;
+export declare function DivinationButton({ runDivination }: DivinationButtonProps): import("react").JSX.Element;

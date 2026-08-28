@@ -75,4 +75,15 @@ fi
 
 echo "=== Compiling src → lib ==="
 "$TSC" -p tsconfig.json
+
+# Host + client bundles: the host half must be self-contained (single-file
+# ESM with every runtime import inlined), because profiles load plugins
+# through file/link junctions whose realpath has no node_modules of its own.
+echo "=== Bundling host + client (tsdown) ==="
+if [ -f "$CHECKOUT/node_modules/tsdown/dist/run.mjs" ]; then
+  node "$CHECKOUT/node_modules/tsdown/dist/run.mjs"
+else
+  echo "build: tsdown not found at $CHECKOUT/node_modules/tsdown — host bundle skipped" >&2
+  exit 1
+fi
 echo "=== Build complete ==="

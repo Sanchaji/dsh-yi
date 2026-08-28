@@ -4,7 +4,7 @@
  * divination modal. Host communication goes through the existing
  * `remote.commands.execute` channel, so no custom Remote service is needed.
  */
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client';
+import type { Context as ClientContext } from '@deepseek-ai/cordis';
 import type { DivinationRequest, DivinationResult } from '../shared.ts';
 export type { DivinationButtonProps } from './DivinationButton.tsx';
 /** Business face injected into the header action component. */
