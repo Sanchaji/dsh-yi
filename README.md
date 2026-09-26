@@ -93,7 +93,7 @@ dsh plugin --profile web add dsh-yi
 | `temperature` | number | `0.8` | 采样温度 |
 | `timeoutMs` | number | `30000` | LLM 调用超时 |
 
-如果没有配置 `provider` / `model`，插件会读取当前会话最近一次 `request/header` 里的 provider/model。全新会话还没发过消息时，建议先发一条消息，或在配置里显式指定。
+如果没有配置 `provider` / `model`，插件会读取当前会话的路由投影：优先使用最近一次已解析的路由（`Session.requestContext()`），否则回退到下一次请求将使用的请求头（`Session.requestHeader()`）。这里读的是 Session 维护的投影，而不是重新扫描事件日志。全新会话还没发过消息时，建议先发一条消息，或在配置里显式指定。
 
 ## 从源码构建
 

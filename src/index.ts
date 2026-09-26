@@ -20,6 +20,17 @@ import {
   type LineValue,
 } from './shared.ts'
 
+/**
+ * `MessageSourceMap` is merge-extensible and has no shared catch-all `plugin`
+ * kind, so this plugin declares its own attribution for the synthesized
+ * user-role message it sends to the auxiliary interpretation call.
+ */
+declare module '@deepseek-ai/dsh-llm' {
+  interface MessageSourceMap {
+    'dsh-yi': { kind: 'dsh-yi' }
+  }
+}
+
 type AppContext = Context & {
   commands: CommandRuntime
   llm: LlmService
@@ -90,6 +101,11 @@ function parseRequest(raw: string): DivinationRequest {
   return { topic, customText, method, lines }
 }
 
+/** Whether a value is a usable non-empty provider/model identifier. */
+function nonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.length > 0
+}
+
 function resolveRoute(agent: Agent, config: Config): { provider: string; model: string } {
   if (config.provider !== undefined && config.model !== undefined) {
     if (config.provider.length === 0 || config.model.length === 0) {
@@ -97,17 +113,19 @@ function resolveRoute(agent: Agent, config: Config): { provider: string; model: 
     }
     return { provider: config.provider, model: config.model }
   }
-  const events = agent.session.events
-  for (let index = events.length - 1; index >= 0; index--) {
-    const event = events[index]
-    if (event.type === 'request/header') {
-      const header = event.data.header.config
-      if (header.provider !== undefined && header.model !== undefined) {
-        return { provider: header.provider, model: header.model }
-      }
-    }
+  // Read the session's maintained projections rather than rescanning the raw
+  // event log: `Session.events` no longer exists, and synchronous historical
+  // readers are deprecated. `requestContext()` is the last resolved route,
+  // `requestHeader()` the config in force for the next request.
+  const context = agent.session.requestContext()
+  if (context !== undefined && nonEmptyString(context.provider) && nonEmptyString(context.model)) {
+    return { provider: context.provider, model: context.model }
   }
-  throw new Error('无法确定当前 LLM 路由：请在插件配置中提供 provider 和 model')
+  const header = agent.session.requestHeader()
+  if (header !== undefined && nonEmptyString(header.config.provider) && nonEmptyString(header.config.model)) {
+    return { provider: header.config.provider, model: header.config.model }
+  }
+  throw new Error('无法确定当前 LLM 路由：请先在本会话发送一条消息，或在插件配置中提供 provider 和 model')
 }
 
 function buildPrompt(question: string, lines: readonly { label: string; changing: boolean }[], originalName: string, originalJudgment: string, changed?: { name: string; judgment: string }): string {
@@ -196,7 +214,7 @@ async function runDivination(
     system,
     messages: [createUserMessage({
       content: [{ type: 'text', text: prompt }],
-      source: { kind: 'plugin', plugin: 'dsh-yi' },
+      source: { kind: 'dsh-yi' },
     })],
     maxTokens: config.maxTokens,
     temperature: config.temperature,

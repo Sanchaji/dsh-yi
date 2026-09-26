@@ -73,7 +73,7 @@ Optional config fields:
 | `temperature` | number | `0.8` | Sampling temperature |
 | `timeoutMs` | number | `30000` | LLM call timeout |
 
-If `provider` / `model` are not set, the plugin reads the route from the latest `request/header` of the current session.
+If `provider` / `model` are not set, the plugin reads the session's maintained route projections: the last resolved route (`Session.requestContext()`), falling back to the header in force for the next request (`Session.requestHeader()`). It reads projected state, never a rescan of the raw event log. On a brand-new session that has not sent a message yet, send one first or set the values explicitly in the config.
 
 ## Build from source
 

@@ -25,8 +25,9 @@ if [ ! -x "$TSC" ] && [ ! -f "$TSC.cmd" ]; then
   exit 1
 fi
 
-link_pkg() {
-  local target="$CHECKOUT/$2"
+# link_node <path under node_modules> <absolute target directory>
+link_node() {
+  local link="node_modules/$1" target="$2"
   if [ ! -e "$target" ]; then
     echo "build: dependency target missing: $target" >&2
     exit 1
@@ -39,7 +40,25 @@ link_pkg() {
     fs.rmSync(link, { recursive: true, force: true });
     fs.mkdirSync(path.dirname(link), { recursive: true });
     fs.symlinkSync(target, link, process.platform === 'win32' ? 'junction' : 'dir');
-  " "node_modules/$1" "$target"
+  " "$link" "$target"
+}
+
+# link_pkg <path under node_modules> <path relative to DSH_CHECKOUT>
+link_pkg() {
+  link_node "$1" "$CHECKOUT/$2"
+}
+
+# link_pnpm <path under node_modules> <dirname pattern in the checkout's pnpm store>
+# Some compile-time dependencies (react and its types) are only present in the
+# pnpm store, so they are resolved by pattern like @standard-schema/spec below.
+link_pnpm() {
+  local found
+  found=$(find "$CHECKOUT/node_modules/.pnpm" -maxdepth 1 -type d -iname "$2" 2>/dev/null | head -1)
+  if [ -z "$found" ]; then
+    echo "build: cannot locate $1 in the checkout's pnpm store ($2)" >&2
+    exit 1
+  fi
+  link_node "$1" "$found/node_modules/$1"
 }
 
 echo "=== Linking build dependencies (checkout: $CHECKOUT) ==="
@@ -54,13 +73,16 @@ link_pkg @deepseek-ai/dsh-system-prompt packages/core/system-prompt
 link_pkg @deepseek-ai/dsh-commands packages/interaction/commands
 link_pkg @deepseek-ai/dsh-agent packages/core/agent
 link_pkg @deepseek-ai/dsh-session packages/core/session
-link_pkg @deepseek-ai/dsh-client-runtime packages/client/runtime
 link_pkg @deepseek-ai/dsh-client-locale packages/client/locale
 link_pkg @deepseek-ai/dsh-client-ui-slots packages/client/ui-slots
+link_pkg @deepseek-ai/dsh-client-ui-renderer packages/client/ui-renderer
 link_pkg @deepseek-ai/dsh-client-ui-conversation packages/client/ui-conversation
 link_pkg @deepseek-ai/dsh-api-remotes packages/api/remotes
 # @types/node（编译类型；checkout 自带）
 link_pkg @types/node node_modules/@types/node
+# react（client 半的 JSX 与 hook 类型；checkout 只放在 pnpm store）
+link_pnpm react 'react@*'
+link_pnpm @types/react '@types+react@*'
 
 STD_SCHEMA=$(find "$CHECKOUT/node_modules/.pnpm" -maxdepth 1 -type d -iname '@standard-schema+spec@*' 2>/dev/null | head -1)
 if [ -n "$STD_SCHEMA" ]; then
